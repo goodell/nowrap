@@ -2,9 +2,9 @@ nowrap
 ======
 
 Takes input on stdin and copies it to stdout, truncating to the width of the
-terminal as needed. This is very similar to cut -c1-${COLUMNS} except that
-this script attempts to understand a limited set of terminal escape sequences
-so that colorized output isn't prematurely truncated.
+terminal as needed. This is very similar to <code>cut -c1-${COLUMNS}</code>
+except that this script attempts to understand a limited set of terminal escape
+sequences so that colorized output isn't prematurely truncated.
 
 *Author*: Dave Goodell <davidjgoodell@gmail.com>
 
