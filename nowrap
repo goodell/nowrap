@@ -20,6 +20,13 @@ use Getopt::Long;
 
 my $columns = `tput cols`;
 chomp($columns);
+
+if ($columns and $ENV{TERM} eq "cygwin") {
+    # use one less than the number of columns when running on Windows under
+    # cygwin.  Thanks to Ingo Karkat: https://github.com/goodell/nowrap/issues/2
+    --$columns;
+}
+
 $columns = 80 unless $columns;
 
 GetOptions(
