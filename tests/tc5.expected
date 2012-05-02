@@ -1,0 +1,15 @@
+123456789|123456789|123456789|123456789|123456789|123456789|123456789|12
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vitae 
+magna aliquet dapibus. Donec augue libero, commodo ac eleifend sed, ultr
+cursus ac, adipiscing eu metus. Sed cursus enim et metus sodales ornare.
+Duis nec neque eu metus venenatis vestibulum. Aenean arcu arcu, sceleris
+Nam eleifend rutrum tellus ac venenatis.
+
+You should see the Greek word 'kosme':       "κόσμε"3456789|123456789|12
+
+This is a randomly selected 2-column Hirigana character: "き"23456789|12
+
+Some Thai combining text (appears to break Vim/Terminal.app?): กั56789|12
+The above Thai char is actually two separate characters where one of the
+

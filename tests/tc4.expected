@@ -1,0 +1,30 @@
+[33mfff5a39[m [34mthakur[m [35m5 days ago[m [31m (trunk)[m try to fix compile errors
+[33m6d4e1f8[m [34mthakur[m [35m6 days ago[m [31m[m fixed typo
+[33ma50dc20[m [34mgoodell[m [35m7 days ago[m [31m[m eval in the wrappers to expand ${wl} correct
+[33mbd59380[m [34mgoodell[m [35m7 days ago[m [31m[m avoid rpath usage in the wrappers when build
+[33md669f90[m [34mgoodell[m [35m7 days ago[m [31m[m remove "src/include/mpio.h" from BUILT_SOURC
+[33m0799e47[m [34mbuntinas[m [35m7 days ago[m [31m[m fix acess to uninitialized variable when de
+[33m94dbd34[m [34mgoodell[m [35m7 days ago[m [31m[m require autoconf 2.67 or 2.68
+[33mbfa818e[m [34mgoodell[m [35m7 days ago[m [31m[m fix a typo in maint/updatefiles
+[33m26bc16e[m [34mgoodell[m [35m7 days ago[m [31m[m don't copy AND symlink mpio.h to src/include
+[33m3db0c3c[m [34mgoodell[m [35m7 days ago[m [31m[m attempt to make $errnames_txt_files uncondti
+[33m53a0d1a[m [34mgoodell[m [35m7 days ago[m [31m[m fix ch3:sock build
+[33mc80c6e7[m [34mbuntinas[m [35m7 days ago[m [31m[m Fix bug where some collectives were incorec
+[33mf849f8e[m [34mbalaji[m [35m7 days ago[m [31m[m Get rid of additional statement asking people
+[33md7db3e1[m [34mbalaji[m [35m8 days ago[m [31m[m Mention the MPI_Alltoall failure as a known i
+[33mf70394a[m [34mbalaji[m [35m8 days ago[m [31m[m Cleanup the now irrelevant information on --e
+[33m2a29ebb[m [34mbalaji[m [35m8 days ago[m [31m[m Got rid of some more unnecessary executable p
+[33mff0e920[m [34mbalaji[m [35m8 days ago[m [31m[m Remove unnecessary executable permission for 
+[33m2b591c4[m [34mbalaji[m [35m9 days ago[m [31m[m Get rid of unnecessary files that configure n
+[33ma0fc8e9[m [34mbalaji[m [35m9 days ago[m [31m[m Get rid of unnecessary files that are created
+[33ma79ac78[m [34mgoodell[m [35m10 days ago[m [31m[m and the umpteenth forgotten file is: doc/Ma
+[33m61aad0f[m [34mchan[m [35m10 days ago[m [31m[m removed unnecessary libtoolize step and its re
+[33mca2703c[m [34mgoodell[m [35m10 days ago[m [31m[m revert r9153 now that the docs are buildabl
+[33m848650e[m [34mgoodell[m [35m10 days ago[m [31m[m use "perl -p -i -e" instead of "sed -i" in 
+[33mb56f5ba[m [34mgoodell[m [35m10 days ago[m [31m[m make the docs buildable again
+[33m716f9be[m [34mchan[m [35m10 days ago[m [31m[m added statement of new features in jumpshot.
+[33m48befdc[m [34mgoodell[m [35m10 days ago[m [31m[m add missing test/mpi/f90/Makefile.am
+[33m00babba[m [34mbalaji[m [35m10 days ago[m [31m[m Added a comment on ABI for the autotools ver
+[33m072e7e6[m [34mbalaji[m [35m10 days ago[m [31m[m Check for exact autotools versions for the r
+[33m08112de[m [34mbalaji[m [35m10 days ago[m [31m[m Commented out the doc creation for now. Reve
+[33m1529877[m [34mbalaji[m [35m10 days ago[m [31m[m Cleanup the release tarball creation script 
