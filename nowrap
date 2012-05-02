@@ -17,6 +17,13 @@ use strict;
 use warnings;
 
 use Getopt::Long;
+use Text::CharWidth qw(mbswidth);
+
+# guess the encoding of STDIN/STDOUT based on the locale specified in
+# the environment
+use open ':locale';
+
+my $TABSTOP = 8;
 
 my $columns = `tput cols`;
 chomp($columns);
@@ -34,28 +41,60 @@ GetOptions(
     "columns=i" => \$columns,
 ) or die "unable to parse options, stopped";
 
+# there's probably a better way to do all of this, but this is the first
+# approach that came to mind when trying to support all of: TABs,
+# variable-width characters, and ANSI escape sequences
 while (my $line = <>) {
-    my $extra_bytes = 0;
-    # not correct, see web page
-    while ($line =~ m/(\e\[\d*(;\d+)*m)/g) {
-        my $escape_sequence = $1;
-        if ((length($`) - length($extra_bytes)) > $columns) {
+    chomp $line;
+
+    my $cursor = 0;
+    my $nchars = 0;
+
+    my @chars = split //, $line;
+
+    my $output = '';
+
+    for (my $i = 0; $i < scalar(@chars); ++$i) {
+        my $c = $chars[$i];
+        my $append = $c;
+
+        if ($c eq "\t") {
+            # TAB-handling logic
+            $cursor += $TABSTOP - ($i % $TABSTOP);
+            ++$nchars;
+        }
+        elsif ($c eq "\e") {
+            # handle escape sequences
+            substr($line, $i, length($line) - $i) =~ m/(\e\[\d*(;\d+)*m)/;
+            die "\$` should be empty, stopped" if $`;
+            my $esc_seq = $1;
+            # skip over the sequence
+            $i      += length($esc_seq) - 1; # -1 b/c of ++$i at loop top
+            $nchars += length($esc_seq);
+            # $cursor is unchanged
+
+            $append = $esc_seq;
+        }
+        else {
+            # handle regular characters, including possible multicolumn
+            # unicode characters
+            ++$nchars;
+            $cursor += char_to_columns($c);
+        }
+
+        if ($cursor > $columns) {
             last;
         }
-        $extra_bytes += length $escape_sequence;
+        else {
+            $output .= $append;
+        }
     }
-
-    # remove newline always and put it back in always to
-    # handle the short line case
-    chomp $line;
-    print substr($line, 0, ($columns + $extra_bytes)) . "\n";
+    print $output, "\n";
 }
 
-sub hexdump {
-    my $str = shift;
-
-    my @chars = split //, $str;
-    return join(':', map {sprintf("%02x", ord($_))} @chars);
+sub char_to_columns {
+    my $c = shift;
+    return mbswidth($c);
 }
 
 sub print_usage_and_exit {
