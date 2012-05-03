@@ -16,8 +16,12 @@
 use strict;
 use warnings;
 
+# to help us find Text::CharWidth::PurePerl
+use FindBin;
+use lib "$FindBin::Bin/lib", "$FindBin::Bin/..lib";
+
 use Getopt::Long;
-use Text::CharWidth qw(mbswidth);
+use Text::CharWidth::PurePerl qw(mbwidth);
 
 # guess the encoding of STDIN/STDOUT based on the locale specified in
 # the environment
@@ -94,7 +98,9 @@ while (my $line = <>) {
 
 sub char_to_columns {
     my $c = shift;
-    return mbswidth($c);
+    my $width = mbwidth($c);
+    return 0 if $width < 0;
+    return $width;
 }
 
 sub print_usage_and_exit {
