@@ -47,8 +47,8 @@ do_test tc4 --columns=72
 # ==== case 5: utf-8 text with wide characters
 do_test tc5 --columns=72
 
-# ==== case 6: TAB handling
-do_test tc6 --columns=72
+# ==== case 6: UTF-8-demo.txt @ 40 columns
+do_test tc7 --columns=40
 
 if test -z "$err" ; then
     echo "PASS"
