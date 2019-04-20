@@ -65,7 +65,7 @@ while (my $line = <>) {
 
         if ($c eq "\t") {
             # TAB-handling logic
-            $cursor += $TABSTOP - ($i % $TABSTOP);
+            $cursor += $TABSTOP - ($cursor % $TABSTOP);
             ++$nchars;
         }
         elsif ($c eq "\e") {
