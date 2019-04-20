@@ -32,6 +32,7 @@ my $TABSTOP = 8;
 
 my $columns = `tput cols`;
 chomp($columns);
+my $isWrap = 0;
 
 if ($columns and $ENV{TERM} eq "cygwin") {
     # use one less than the number of columns when running on Windows under
@@ -44,6 +45,7 @@ $columns = 80 unless $columns;
 GetOptions(
     "help" => \&print_usage_and_exit,
     "columns=i" => \$columns,
+    "wrap" => \$isWrap,
 ) or die "unable to parse options, stopped";
 
 # there's probably a better way to do all of this, but this is the first
@@ -65,7 +67,7 @@ while (my $line = <>) {
 
         if ($c eq "\t") {
             # TAB-handling logic
-            $cursor += $TABSTOP - ($i % $TABSTOP);
+            $cursor += $TABSTOP - ($cursor % $TABSTOP);
             ++$nchars;
         }
         elsif ($c eq "\e") {
@@ -88,7 +90,14 @@ while (my $line = <>) {
         }
 
         if ($cursor > $columns) {
-            last;
+            if ($isWrap) {
+                print "$output", "\n";
+                $output = '';
+                $cursor = 0;
+                redo;
+            } else {
+                last;
+            }
         }
         else {
             $output .= $append;
@@ -106,7 +115,7 @@ sub char_to_columns {
 
 sub print_usage_and_exit {
     print <<EOT;
-Usage: $0 [--columns=N] [FILE]...
+Usage: $0 [--columns=N] [--wrap] [FILE]...
 
 Takes data on standard input or in any specified files and dumps it to
 standard output similar to cat or cut.  However, all output will be
