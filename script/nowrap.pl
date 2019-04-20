@@ -53,7 +53,8 @@ GetOptions(
         use List::Util qw(sum0);
         use Encode qw(decode_utf8);
         $indentString = decode_utf8($_[1], 1);
-        $indentLength = sum0 map { $_ eq "\t" ? $TABSTOP : char_to_columns($_) } split //, $indentString;
+        (my $indentStringWithoutEscapeSequences = $indentString) =~ s/$ESCAPE_SEQUENCE_PATTERN//g;
+        $indentLength = sum0 map { $_ eq "\t" ? $TABSTOP : char_to_columns($_) } split //, $indentStringWithoutEscapeSequences;
     },
 ) or die "unable to parse options, stopped";
 
