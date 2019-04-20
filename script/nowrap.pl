@@ -29,6 +29,7 @@ use Text::CharWidth::PurePerl qw(mbwidth);
 use open ':locale';
 
 my $TABSTOP = 8;
+my $ESCAPE_SEQUENCE_PATTERN = qr/(\e\[\d*(;\d+)*m)/;
 
 my $columns = `tput cols`;
 chomp($columns);
@@ -80,7 +81,7 @@ while (my $line = <>) {
         }
         elsif ($c eq "\e") {
             # handle escape sequences
-            substr($line, $i, length($line) - $i) =~ m/(\e\[\d*(;\d+)*m)/;
+            substr($line, $i, length($line) - $i) =~ m/$ESCAPE_SEQUENCE_PATTERN/;
             die "\$` should be empty, stopped" if $`;
             my $esc_seq = $1;
             # skip over the sequence
