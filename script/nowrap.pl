@@ -33,6 +33,8 @@ my $TABSTOP = 8;
 my $columns = `tput cols`;
 chomp($columns);
 my $isWrap = 0;
+my $indentString = '';
+my $indentLength = 0;
 
 if ($columns and $ENV{TERM} eq "cygwin") {
     # use one less than the number of columns when running on Windows under
@@ -46,6 +48,12 @@ GetOptions(
     "help" => \&print_usage_and_exit,
     "columns=i" => \$columns,
     "wrap" => \$isWrap,
+    "indent-string=s" => sub {
+        use List::Util qw(sum0);
+        use Encode qw(decode_utf8);
+        $indentString = decode_utf8($_[1], 1);
+        $indentLength = sum0 map { $_ eq "\t" ? $TABSTOP : char_to_columns($_) } split //, $indentString;
+    },
 ) or die "unable to parse options, stopped";
 
 # there's probably a better way to do all of this, but this is the first
@@ -92,8 +100,8 @@ while (my $line = <>) {
         if ($cursor > $columns) {
             if ($isWrap) {
                 print "$output", "\n";
-                $output = '';
-                $cursor = 0;
+                $output = $indentString;
+                $cursor = $indentLength;
                 redo;
             } else {
                 last;
@@ -115,7 +123,7 @@ sub char_to_columns {
 
 sub print_usage_and_exit {
     print <<EOT;
-Usage: $0 [--columns=N] [--wrap] [FILE]...
+Usage: $0 [--columns=N] [--wrap [--indent=INDENT-STRING]] [FILE]...
 
 Takes data on standard input or in any specified files and dumps it to
 standard output similar to cat or cut.  However, all output will be
