@@ -50,6 +50,9 @@ do_test tc5 --columns=72
 # ==== case 6: UTF-8-demo.txt @ 40 columns
 do_test tc7 --columns=40
 
+# ==== wrap
+do_test tcwrap --wrap --columns=10
+
 if test -z "$err" ; then
     echo "PASS"
     rm -f *.out BOGUS
