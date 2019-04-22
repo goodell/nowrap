@@ -52,6 +52,10 @@ do_test tc7 --columns=40
 
 # ==== wrap
 do_test tcwrap --wrap --columns=10
+do_test tcindent-plain --wrap --indent-string '> ' --columns=10
+do_test tcindent-tab --wrap --indent-string '	' --columns=18
+do_test tcindent-ansi --wrap --indent-string '[01;41m|[0m' --columns=10
+do_test tcindent-unicode --wrap --indent-string '«日»' --columns=10
 
 if test -z "$err" ; then
     echo "PASS"
