@@ -13,9 +13,9 @@ rm -f *.out BOGUS
 
 do_test() {
     prefix="$1"
-    args="$2"
+    shift
 
-$NOWRAP $args $prefix.in > $prefix.out
+$NOWRAP "$@" $prefix.in > $prefix.out
 if $DIFF $prefix.expected $prefix.out ; then
     :
 else
