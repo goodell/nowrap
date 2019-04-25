@@ -1,3 +1,5 @@
+[![Travis CI build status](https://travis-ci.org/goodell/nowrap.svg?branch=master)](https://travis-ci.org/goodell/nowrap)
+
 # nowrap
 
 Takes input on stdin and copies it to stdout, truncating to the width of the
