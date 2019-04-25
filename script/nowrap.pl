@@ -43,6 +43,10 @@ $columns = 80 unless $columns;
 
 GetOptions(
     "help" => \&print_usage_and_exit,
+    "unbuffered" => sub {
+        use IO::Handle qw();
+        STDOUT->autoflush(1);
+    },
     "columns=i" => \$columns,
 ) or die "unable to parse options, stopped";
 
@@ -106,7 +110,7 @@ sub char_to_columns {
 
 sub print_usage_and_exit {
     print <<EOT;
-Usage: $0 [--columns=N] [FILE]...
+Usage: $0 [--unbuffered] [--columns=N] [FILE]...
 
 Takes data on standard input or in any specified files and dumps it to
 standard output similar to cat or cut.  However, all output will be
