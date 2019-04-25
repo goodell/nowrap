@@ -14,3 +14,10 @@ script:
     - stty cols 238
     - make
     - make check
+
+notifications:
+    recipients:
+        - dave@goodell.io
+    email:
+        on_success: change
+        on_failure: always
