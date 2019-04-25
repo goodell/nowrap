@@ -9,6 +9,9 @@ sequences so that colorized output isn't prematurely truncated.
 
 *Author*: Dave Goodell <davidjgoodell@gmail.com>
 
+*Contributors*:
+- Ingo Karkat <swdev@ingo-karkat.de>
+
 ## Build Instructions
 
 For convenience, a dependency-free "FatPacked" perl script is checked in as
