@@ -1,5 +1,4 @@
-nowrap
-======
+# nowrap
 
 Takes input on stdin and copies it to stdout, truncating to the width of the
 terminal as needed. This is very similar to <code>cut -c1-${COLUMNS}</code>
@@ -8,8 +7,19 @@ sequences so that colorized output isn't prematurely truncated.
 
 *Author*: Dave Goodell <davidjgoodell@gmail.com>
 
+## Build Instructions
+
+For convenience, a dependency-free "FatPacked" perl script is checked in as
+`nowrap` in the top level of this repository.  If you make modifications and
+wish to test them, run "make" followed by "make check".  The Makefile depends
+on having a functional version of App::FatPacker::Simple installed from CPAN.
+
+The script depends on [Text::CharWidth::PurePerl](https://github.com/goodell/text-charwidth-pureperl),
+which isn't currently available via CPAN because CPAN is a PITA for
+developers.  So a copy of that is also included in this repository.
+
 -----------------------------------------------------------------------
-Copyright (c) 2009 Dave Goodell
+Copyright (c) 2009-2019 Dave Goodell
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
