@@ -8,6 +8,6 @@ perl:
 
 install: ""
 script:
-    - stty cols 300
+    - stty cols 238
     - make
     - make check
