@@ -4,13 +4,23 @@
 #
 # Perl port of https://github.com/shurizzle/ruby-wcwidth
 # Indirect thanks to http://www.cl.cam.ac.uk/~mgk25/ucs/wcwidth.c
+#
+# TODO:
+# - add tests of just this module, not just indirectly through `nowrap`
+# - add POD docs
+# - add import tag to control mbswidth (-1) compatibility with perl or ruby/C
+# behavior
+
+use strict;
+use warnings;
 
 package Text::CharWidth::PurePerl;
+our $VERSION = 0.20;
 
 use List::Util qw(sum);
 
 use Exporter 'import';
-@EXPORT_OK = qw( mbwidth mbswidth );
+our @EXPORT_OK = qw( mbwidth mbswidth );
 
 my @COMBINING = (
     [0x0300, 0x036F], [0x0483, 0x0486], [0x0488, 0x0489],
@@ -68,14 +78,14 @@ sub bisearch_ {
     my $table = shift;
     my $char = shift;
     my ($max, $min, $mid) = (@$table-1, 0, 0);
-    return 0 if ord($char) < $table[0]->[0] or ord($char) > $table[-1]->[1];
+    return 0 if ord($char) < $table->[0]->[0] or ord($char) > $table->[-1]->[1];
 
     while ($max >= $min) {
         $mid = ($min + $max) / 2;
-        if (ord($char) > $table[$mid]->[1]) {
+        if (ord($char) > $table->[$mid]->[1]) {
             $min = $mid + 1;
         }
-        elsif (ord($char) < $table[$mid]->[0]) {
+        elsif (ord($char) < $table->[$mid]->[0]) {
             $max = $mid - 1;
         }
         else {
@@ -124,7 +134,7 @@ sub mbwidth {
 
     return 0 if ord($char) == 0;
 
-    sreturn -1 if ord($char < 32) or (ord($char) >= 0x7f and ord($char) < 0xa0);
+    return -1 if ord($char) < 32 or (ord($char) >= 0x7f and ord($char) < 0xa0);
 
     return 0 if bisearch_(\@COMBINING, $char);
 
@@ -163,7 +173,8 @@ sub mbswidth {
     return sum @widths;
 }
 
-
+1;
+__END__
 # Copyright (c) 2012 Dave Goodell
 #
 # Permission is hereby granted, free of charge, to any person
