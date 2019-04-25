@@ -7,4 +7,7 @@ perl:
     - "5.20"
 
 install: ""
-script: make && make check
+script:
+    - stty cols 300
+    - make
+    - make check
