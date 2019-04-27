@@ -29,9 +29,13 @@ use Text::CharWidth::PurePerl qw(mbwidth);
 use open ':locale';
 
 my $TABSTOP = 8;
+my $ESCAPE_SEQUENCE_PATTERN = qr/(\e\[\d*(;\d+)*m)/;
 
 my $columns = `tput cols`;
 chomp($columns);
+my $isWrap = 0;
+my $indentString = '';
+my $indentLength = 0;
 
 if ($columns and $ENV{TERM} eq "cygwin") {
     # use one less than the number of columns when running on Windows under
@@ -48,6 +52,14 @@ GetOptions(
         STDOUT->autoflush(1);
     },
     "columns=i" => \$columns,
+    "wrap" => \$isWrap,
+    "indent-string=s" => sub {
+        use List::Util qw(sum0);
+        use Encode qw(decode_utf8);
+        $indentString = decode_utf8($_[1], 1);
+        (my $indentStringWithoutEscapeSequences = $indentString) =~ s/$ESCAPE_SEQUENCE_PATTERN//g;
+        $indentLength = sum0 map { $_ eq "\t" ? $TABSTOP : char_to_columns($_) } split //, $indentStringWithoutEscapeSequences;
+    },
 ) or die "unable to parse options, stopped";
 
 # there's probably a better way to do all of this, but this is the first
@@ -74,7 +86,7 @@ while (my $line = <>) {
         }
         elsif ($c eq "\e") {
             # handle escape sequences
-            substr($line, $i, length($line) - $i) =~ m/(\e\[\d*(;\d+)*m)/;
+            substr($line, $i, length($line) - $i) =~ m/$ESCAPE_SEQUENCE_PATTERN/;
             die "\$` should be empty, stopped" if $`;
             my $esc_seq = $1;
             # skip over the sequence
@@ -92,7 +104,14 @@ while (my $line = <>) {
         }
 
         if ($cursor > $columns) {
-            last;
+            if ($isWrap) {
+                print "$output", "\n";
+                $output = $indentString;
+                $cursor = $indentLength;
+                redo;
+            } else {
+                last;
+            }
         }
         else {
             $output .= $append;
@@ -110,7 +129,7 @@ sub char_to_columns {
 
 sub print_usage_and_exit {
     print <<EOT;
-Usage: $0 [--unbuffered] [--columns=N] [FILE]...
+Usage: $0 [--unbuffered] [--columns=N] [--wrap [--indent=INDENT-STRING]] [FILE]...
 
 Takes data on standard input or in any specified files and dumps it to
 standard output similar to cat or cut.  However, all output will be
