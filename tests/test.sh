@@ -6,6 +6,7 @@
 # allow override from the environment
 : ${NOWRAP:=../nowrap}
 : ${DIFF:=diff -q}
+: ${TIMEOUT:=timeout}
 
 #set -x
 
@@ -15,14 +16,30 @@ do_test() {
     prefix="$1"
     shift
 
-$NOWRAP "$@" $prefix.in > $prefix.out
+$TIMEOUT --foreground 2s $NOWRAP "$@" $prefix.in > $prefix.out
+status=$?
+if [[ $status -ne 0 ]] ; then
+    echo "ERROR: $prefix failed (timed out)"
+    err=1
+    return
+fi
+
 if $DIFF $prefix.expected $prefix.out ; then
     :
 else
-    echo "ERROR: $prefix failed"
+    echo "ERROR: $prefix failed (expected != output)"
     err=1
 fi
 }
+
+# ==== prerequisite checks
+if which $TIMEOUT >/dev/null 2>&1 ; then
+    :
+else
+    echo "ERROR: missing GNU timeout, please install coreutils (e.g., brew install coreutils)"
+    echo "and/or set \$TIMEOUT"
+    exit 1
+fi
 
 # ==== case 0: simple text, asking for narrower
 do_test tc0 --columns=72
