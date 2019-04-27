@@ -108,6 +108,14 @@ GetOptions(
     },
 ) or die "unable to parse options, stopped";
 
+if ($columns < $indentLength + 1) {
+    die "--columns too small to accommodate --indent-string and any characters, stopped";
+}
+
+if ($columns < $TABSTOP) {
+    die "--columns too small to accommodate tabs, stopped";
+}
+
 # there's probably a better way to do all of this, but this is the first
 # approach that came to mind when trying to support all of: TABs,
 # variable-width characters, and ANSI escape sequences

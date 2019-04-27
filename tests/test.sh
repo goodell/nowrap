@@ -7,6 +7,7 @@
 : ${NOWRAP:=../nowrap}
 : ${DIFF:=diff -q}
 : ${TIMEOUT:=timeout}
+: ${TAB_STOP:=8}
 
 #set -x
 
@@ -30,6 +31,20 @@ else
     echo "ERROR: $prefix failed (expected != output)"
     err=1
 fi
+}
+
+# test an expected script failure (not timeout, no output comparison)
+# function args are just extra args to nowrap
+exp_fail() {
+    $TIMEOUT --foreground 1s $NOWRAP "$@" >/dev/null 2>&1
+    status=$?
+    if [[ $status -eq 124 ]] ; then
+        echo "ERROR: expected '--wrap --columns=$i' to fail, it timed out instead"
+        err=1
+    elif [[ $status -eq 0 ]] ; then
+        echo "ERROR: expected '--wrap --columns=$i' to fail, it succeeded"
+        err=1
+    fi
 }
 
 # ==== prerequisite checks
@@ -76,6 +91,20 @@ do_test tcindent-plain --wrap --indent-string '> ' --columns=10
 do_test tcindent-tab --wrap --indent-string '	' --columns=18
 do_test tcindent-ansi --wrap --indent-string '[01;41m|[0m' --columns=10
 do_test tcindent-unicode --wrap --indent-string '«日»' --columns=10
+
+# ==== passing an overly-long indent-string (or overly short columns) should
+# result in an error
+if [[ $TAB_STOP -eq 8 ]] ; then
+    exp_fail --wrap --indent-string '«日日日日日日日»' --columns=9
+else
+    echo "\$TAB_STOP is not 8, skipping --indent-string length case"
+fi
+
+# ==== ensure that wrapping at smaller than 8 is prohibited to avoid infinite
+# looping/misrendering on tabs
+for i in $( seq 0 $(($TAB_STOP - 1)) ) ; do
+    exp_fail --wrap --columns=$i tcindent-tab.in
+done
 
 if test -z "$err" ; then
     echo "PASS"
