@@ -16,8 +16,8 @@ script:
     - make check
 
 notifications:
-    recipients:
-        - dave@goodell.io
     email:
         on_success: change
         on_failure: always
+        recipients:
+            - dave@goodell.io
