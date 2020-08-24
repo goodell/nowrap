@@ -7,7 +7,7 @@ perl:
     - "5.20"
 
 before_install:
-    - cpanm App::FatPacker::Simple
+    - cpanm --force App::FatPacker::Simple
 
 install: ""
 script:
@@ -16,7 +16,7 @@ script:
     - make check
 
 after_failure:
-  - cat /home/travis/.cpanm/work/*/build.log
+  - "cat /home/travis/.cpanm/work/*/build.log"
 
 notifications:
     email:
