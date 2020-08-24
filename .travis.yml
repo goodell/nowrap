@@ -7,7 +7,7 @@ perl:
     - "5.20"
 
 before_install:
-    - cpanm App::FatPacker::Simple
+    - cpanm --force App::FatPacker::Simple
 
 install: ""
 script:
