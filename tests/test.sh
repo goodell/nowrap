@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # a simple test script for a few more exotic wrapping cases
 #
