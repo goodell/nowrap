@@ -31,19 +31,10 @@ use open ':locale';
 my $TABSTOP = 8;
 my $ESCAPE_SEQUENCE_PATTERN = qr/(\e\[\d*(;\d+)*m)/;
 
-my $columns = `tput cols`;
-chomp($columns);
 my $isWrap = 0;
 my $indentString = '';
 my $indentLength = 0;
-
-if ($columns and $ENV{TERM} eq "cygwin") {
-    # use one less than the number of columns when running on Windows under
-    # cygwin.  Thanks to Ingo Karkat: https://github.com/goodell/nowrap/issues/2
-    --$columns;
-}
-
-$columns = 80 unless $columns;
+my $columns;
 
 GetOptions(
     "help" => \&print_usage_and_exit,
@@ -61,6 +52,19 @@ GetOptions(
         $indentLength = sum0 map { $_ eq "\t" ? $TABSTOP : char_to_columns($_) } split //, $indentStringWithoutEscapeSequences;
     },
 ) or die "unable to parse options, stopped";
+
+unless (defined $columns) {
+  $columns = `tput cols`;
+  chomp($columns);
+
+  if ($columns and $ENV{TERM} eq "cygwin") {
+      # use one less than the number of columns when running on Windows under
+      # cygwin.  Thanks to Ingo Karkat: https://github.com/goodell/nowrap/issues/2
+      --$columns;
+  }
+
+  $columns = 80 unless $columns;
+}
 
 if ($columns < $indentLength + 1) {
     die "--columns too small to accommodate --indent-string and any characters, stopped";

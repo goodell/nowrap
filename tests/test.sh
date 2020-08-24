@@ -114,3 +114,27 @@ else
     exit 1
 fi
 
+# make sure nowrap doesn't invoke 'tput' if '-c' is passed
+(
+    # TERM is the one that matters (breaks 'tput cols'), but COLUMNS and LINES
+    # are to avoid any clever fallback that might get added to nowrap in the
+    # future
+    unset TERM
+    unset COLUMMS
+    unset LINES
+
+    # send stderr to /dev/null because nohup always warns about redirecting its output
+    nohup ${NOWRAP} --columns=72 tc0.in 2>/dev/null
+    status=$?
+    if [[ $status -ne 0 ]] ; then
+        echo "ERROR: non-zero exit code ($status)"
+    fi
+
+    if $DIFF tc0.expected nohup.out ; then
+        :
+    else
+        echo "ERROR: nohup run failed (expected != output)"
+    fi
+
+    rm -f nohup.out
+)
