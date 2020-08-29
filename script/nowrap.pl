@@ -92,9 +92,8 @@ while (my $line = <>) {
             $cursor += $TABSTOP - ($cursor % $TABSTOP);
             ++$nchars;
         }
-        elsif ($c eq "\e") {
+        elsif ($c eq "\e" && substr($line, $i, length($line) - $i) =~ m/$ESCAPE_SEQUENCE_PATTERN/) {
             # handle escape sequences
-            substr($line, $i, length($line) - $i) =~ m/$ESCAPE_SEQUENCE_PATTERN/;
             die "\$` should be empty, stopped" if $`;
             my $esc_seq = $1;
             # skip over the sequence
