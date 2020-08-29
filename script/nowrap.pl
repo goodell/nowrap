@@ -29,7 +29,7 @@ use Text::CharWidth::PurePerl qw(mbwidth);
 use open ':locale';
 
 my $TABSTOP = 8;
-my $ESCAPE_SEQUENCE_PATTERN = qr/(\e\[\d*(;\d+)*m)/;
+my $ESCAPE_SEQUENCE_PATTERN = qr/(\e(\[\d*(;\d+)*m|\e*[^\e]))/;
 
 my $columns = `tput cols`;
 chomp($columns);
