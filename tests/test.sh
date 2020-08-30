@@ -63,7 +63,12 @@ do_test tc0 --columns=72
 do_test tc1 --columns=140
 
 # ==== case 2: simple text but don't specify columns
-do_test tc2
+required_cols=150
+if test `tput cols` -lt $required_cols ; then
+    echo "columns are "`tput cols`" not at least $required_cols, skipping test 2"
+else
+    do_test tc2
+fi
 
 # ==== case 3: colored text, don't specify columns
 assumed_cols=238
