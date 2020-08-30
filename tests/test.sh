@@ -85,6 +85,9 @@ do_test tc6 --columns=72
 # ==== case 7: UTF-8-demo.txt @ 40 columns
 do_test tc7 --columns=40
 
+# ==== escape characters and colored text
+do_test tcescape --columns=10
+
 # ==== wrap
 do_test tcwrap --wrap --columns=10
 do_test tcindent-plain --wrap --indent-string '> ' --columns=10
