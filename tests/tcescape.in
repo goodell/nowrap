@@ -7,5 +7,6 @@ adjacentescapes
 after singlespace
 after   manyspaces
 after	tabulator
+after		tabulators
 endescape
 endescap

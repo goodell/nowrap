@@ -100,10 +100,11 @@ while (my $line = <>) {
             $i      += length($esc_seq) - 1; # -1 b/c of ++$i at loop top
             $nchars += length($esc_seq);
 
-            if ($esc_seq =~ m/\t/) {
+            my $tabCount = () = $esc_seq =~ /\t/g;
+            if ($tabCount > 0) {
               # In contrast to spaces, tabs within the escape sequence are not
               # swallowed.
-              $cursor += $TABSTOP - ($cursor % $TABSTOP);
+              $cursor += ($tabCount * $TABSTOP) - ($cursor % $TABSTOP);
             }
 
             $append = $esc_seq;
