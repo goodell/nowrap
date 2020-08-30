@@ -29,7 +29,7 @@ use Text::CharWidth::PurePerl qw(mbwidth);
 use open ':locale';
 
 my $TABSTOP = 8;
-my $ESCAPE_SEQUENCE_PATTERN = qr/(\e(\[\d*(;\d+)*m|\e* *[^\e]))/;
+my $ESCAPE_SEQUENCE_PATTERN = qr/(\e(\[\d*(;\d+)*m|\e*[ \t]*[^\e]))/;
 
 my $columns = `tput cols`;
 chomp($columns);
@@ -99,7 +99,12 @@ while (my $line = <>) {
             # skip over the sequence
             $i      += length($esc_seq) - 1; # -1 b/c of ++$i at loop top
             $nchars += length($esc_seq);
-            # $cursor is unchanged
+
+            if ($esc_seq =~ m/\t/) {
+              # In contrast to spaces, tabs within the escape sequence are not
+              # swallowed.
+              $cursor += $TABSTOP - ($cursor % $TABSTOP);
+            }
 
             $append = $esc_seq;
         }
