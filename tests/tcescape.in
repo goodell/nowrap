@@ -4,5 +4,7 @@ singleescape
 twoescapeoccurrences
 adjacentescapes
 adjacentescapes
+after singlespace
+after   manyspaces
 endescape
 endescap
