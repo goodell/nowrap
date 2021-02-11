@@ -15,8 +15,13 @@ script:
     - make
     - make check
 
+after_failure:
+  - "cat /home/travis/.cpanm/work/*/build.log"
+
 notifications:
     email:
+        recipients:
+            - dave@goodell.io
         on_success: change
         on_failure: always
         recipients:
